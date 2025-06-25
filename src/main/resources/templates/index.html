@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>English Vocabulary Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f4f4f4;
+    }
+
+    #quiz-container {
+      background: white;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .question {
+      margin: 20px 0;
+      font-size: 18px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+
+    #result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    #score {
+      text-align: right;
+      margin-top: 10px;
+      font-size: 16px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+<div id="quiz-container">
+  <h1>📝 English Quiz</h1>
+  <div id="question" class="question">Loading...</div>
+  <input type="text" id="answer-input" placeholder="Type your answer here">
+  <button onclick="checkAnswer()">Submit</button>
+  <div id="result"></div>
+  <div id="score">Score: 0</div>
+</div>
+
+<script>
+  const quizData = [
+    { eng: "apple", kor: "사과" },
+    { eng: "book", kor: "책" },
+    { eng: "computer", kor: "컴퓨터" },
+    { eng: "teacher", kor: "선생님" },
+    { eng: "dog", kor: "개" },
+    { eng: "water", kor: "물" },
+    { eng: "friend", kor: "친구" },
+    { eng: "sun", kor: "태양" },
+    { eng: "car", kor: "자동차" },
+    { eng: "music", kor: "음악" }
+  ];
+
+  let current = 0;
+  let score = 0;
+
+  const questionEl = document.getElementById("question");
+  const inputEl = document.getElementById("answer-input");
+  const resultEl = document.getElementById("result");
+  const scoreEl = document.getElementById("score");
+
+  function showQuestion() {
+    if (current < quizData.length) {
+      const q = quizData[current];
+      questionEl.innerText = `Q${current + 1}. What is the English word for "${q.kor}"?`;
+      inputEl.value = "";
+      resultEl.innerText = "";
+    } else {
+      questionEl.innerText = "Quiz Complete!";
+      inputEl.style.display = "none";
+      document.querySelector("button").style.display = "none";
+      resultEl.innerText = `🎉 Your final score is ${score}/${quizData.length}`;
+    }
+  }
+
+  function checkAnswer() {
+    const userAnswer = inputEl.value.trim().toLowerCase();
+    const correct = quizData[current].eng.toLowerCase();
+
+    if (userAnswer === correct) {
+      resultEl.style.color = "green";
+      resultEl.innerText = "✅ Correct!";
+      score++;
+    } else {
+      resultEl.style.color = "red";
+      resultEl.innerText = `❌ Incorrect! The correct answer was "${correct}".`;
+    }
+
+    scoreEl.innerText = `Score: ${score}`;
+    current++;
+    setTimeout(showQuestion, 1500);
+  }
+
+  showQuestion();
+</script>
+</body>
+</html>
